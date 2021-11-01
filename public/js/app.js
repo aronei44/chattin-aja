@@ -37668,8 +37668,10 @@ module.exports = JSON.parse('{"name":"axios","version":"0.21.4","description":"P
 /******/ 	(() => {
 /******/ 		// This function allow to reference async chunks
 /******/ 		__webpack_require__.u = (chunkId) => {
+/******/ 			// return url for filenames not based on template
+/******/ 			if ({"resources_js_Pages_Index_js":1,"resources_js_Pages_Layout_js":1}[chunkId]) return "js/" + chunkId + ".js";
 /******/ 			// return url for filenames based on template
-/******/ 			return "js/" + chunkId + ".js?id=" + {"resources_js_Pages_Index_js":"1b6f5ae076d509c3","resources_js_Pages_Layout_js":"ca16da78652a6cf5"}[chunkId] + "";
+/******/ 			return undefined;
 /******/ 		};
 /******/ 	})();
 /******/ 	

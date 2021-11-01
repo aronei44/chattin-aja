@@ -50,30 +50,48 @@ export default function Welcome({name, id, chats}) {
 		const data = {text, id}
 		Inertia.post('/',data)
 	}
+	setTimeout(()=>{
+		const elem = document.getElementById('scroll');
+		if(elem){
+	 		elem.scrollTop = elem.scrollHeight;
+		}
+	},1)
 	if(id!=undefined){
 	  return (
 	    <Layout>
 	      <div id="content">
-	        <nav className="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+	        <nav className="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow" style={{
+	        	position:'fixed',
+	        	top:'0px',
+	        	width:'100%',
+	        	zIndex:'999'
+	      	}}>
 	          
 	          <ul className="navbar-nav mr-auto">
 	            <li className="nav-item dropdown no-arrow">
-	              <a className="nav-link" href="#" id="userDropdown">
+	              <a className="nav-link">
 	                <img className="img-profile rounded-circle" src="/img/undraw_profile.svg" />
 	                <span className="ml-2 text-gray-600 small">{name}</span>
 	              </a>
 	              
 	            </li>
 	          </ul>
+	          <ul className="navbar-nav ml-auto">
+	          	<li className="nav-item">
+	          		<button type="button" className="btn btn-danger" onClick={()=>{
+	          			document.getElementById('logform').submit()
+	          		}}>Log Out</button>
+	          	</li>
+	          </ul>
 	        </nav>
 	        {/* End of Topbar */}
 	        {/* Begin Page Content */}
-	        <div className="container">
+	        <div className="container" id='scroll' style={{height:'500px',overflow:'auto',marginTop:'75px'}}>
 	          {chats.map((data)=>{
 	          	if(data.from==user.id){
-	          		return <Right data={data} />
+	          		return <Right data={data} key={data.id}/>
 	          	}else{
-	          		return <Left data={data} />
+	          		return <Left data={data} key={data.id}/>
 	          	}
 	          })}
 	          
@@ -103,12 +121,18 @@ export default function Welcome({name, id, chats}) {
 	          
 	          <ul className="navbar-nav mr-auto">
 	            <li className="nav-item dropdown no-arrow">
-	              <a className="nav-link" href="#" id="userDropdown">
+	              <a className="nav-link">
 	                <img className="img-profile rounded-circle" src="/img/undraw_profile.svg" />
 	                <span className="ml-2 d-none d-lg-inline text-gray-600 small">{name}</span>
-	              </a>
-	              
+	              </a> 
 	            </li>
+	          </ul>
+	          <ul className="navbar-nav ml-auto">
+	          	<li className="nav-item">
+	          		<button type="button" className="btn btn-danger" onClick={()=>{
+	          			document.getElementById('logform').submit()
+	          		}}>Log Out</button>
+	          	</li>
 	          </ul>
 	        </nav>
 	      </div>

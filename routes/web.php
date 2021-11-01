@@ -27,9 +27,12 @@ Route::get('/', function () {
 Route::post('/', function (Request $request) {
 	$chat = Chat::where('user1_id',Auth::user()->id)
 			->where('user2_id',$request->id)
-			->first() or Chat::where('user1_id',$request->id)
+			->first();
+	if(!$chat){
+		$chat = Chat::where('user1_id',$request->id)
 			->where('user2_id',Auth::user()->id)
 			->first();
+	}
 	if(!$chat){
 		$chat = Chat::create([
 			'user1_id'=>Auth::user()->id,
@@ -64,4 +67,13 @@ Route::post('/', function (Request $request) {
     	'chats'=>$chats
     ]);
 })->middleware('auth');
+
+Route::post('/user',function(Request $request){
+	$users = [];
+	foreach (User::where('email','like','%'.$request->email.'%')->get() as $user) {
+		$user[] = ['name'=>$user->name,'email'=>$user->email,'id'=>$user->id];
+	}
+	;
+	return $users;
+});
 

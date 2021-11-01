@@ -9,6 +9,8 @@ import '/js/sb-admin-2.min.js'
 
 export default function Layout({ children }) {
 const { users, user } = usePage().props
+const [email, setEmail] = useState('')
+const [data, setData] = useState([])
 const handleClick = (id) =>{
   Inertia.post('/', {id})
 }
@@ -17,12 +19,55 @@ const handleClick = (id) =>{
       <Head title="Chattin Aja" />
       <div id="wrapper">
           <ul className="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
-            <a className="sidebar-brand d-flex align-items-center justify-content-center" href="#">
+            <Link className="sidebar-brand d-flex align-items-center justify-content-center" href="/">
               <div className="sidebar-brand-text mx-3">Chattin aja</div>
-            </a>
+            </Link>
             <hr className="sidebar-divider my-0" />
-
-            <li className="nav-item py-2">
+            <li className="nav-item">
+              <p className="nav-link">
+                <button type="button" className="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                <i className="fas fa-search"></i>
+                  Search User
+                </button>
+              </p>
+              <div className="modal fade" id="exampleModal" tabIndex={-1} role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div className="modal-dialog" role="document">
+                  <div className="modal-content">
+                    <div className="modal-header">
+                      <h5 className="modal-title" id="exampleModalLabel">Search User</h5>
+                      <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                      </button>
+                    </div>
+                    <div className="modal-body">
+                      <input type="text" placeholder="Please Input User Email Only" className="form-control" onChange={(e)=>{
+                      setData(Inertia.post('/user',{email:e.target.value}))
+                    }} />
+                      <p>User Found:</p>
+                      <table className='table'>
+                        <thead>
+                          <tr>
+                            <td>Username</td>
+                            <td>Email</td>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {data.map((d)=>{
+                            return(
+                              <tr>
+                                <td>{d.name}</td>
+                                <td>{d.email}</td>
+                              </tr>
+                            )
+                          })}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </li>
+            <li className="nav-item py-2" style={{height:'600px',overflow:'auto'}}>
             {users.map((pengguna)=>{
               if(pengguna.id == user.id){
 
