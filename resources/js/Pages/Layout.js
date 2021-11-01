@@ -9,78 +9,67 @@ import '/js/sb-admin-2.min.js'
 
 export default function Layout({ children }) {
 const { users, user } = usePage().props
-const [email, setEmail] = useState('')
-const [data, setData] = useState([])
 const handleClick = (id) =>{
   Inertia.post('/', {id})
 }
+const [name, setName] = useState('')
+const [userSearch, setUserSearch] = useState([{
+  name:'',
+  email:'',
+  id:''
+}])
+
+const search = () =>{
+    fetch('/api/user/'+name)
+        .then(response => response.json())
+        .then(data => setUserSearch(data));
+
+}
+
   return (
     <main id="page-top">
       <Head title="Chattin Aja" />
       <div id="wrapper">
           <ul className="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
-            <Link className="sidebar-brand d-flex align-items-center justify-content-center" href="/">
+            <Link className="sidebar-brand d-flex align-items-center justify-content-center" style={{position:'fixed',top:'0px'}} href="/">
               <div className="sidebar-brand-text mx-3">Chattin aja</div>
             </Link>
-            <hr className="sidebar-divider my-0" />
-            <li className="nav-item">
+            <hr className="sidebar-divider my-0"  />
+            <li className="nav-item" style={{marginTop:'75px'}}>
               <p className="nav-link">
-                <button type="button" className="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-                <i className="fas fa-search"></i>
-                  Search User
+                <input className="form-control" type="text" placeholder="masukan username" onChange={(e)=>setName(e.target.value)} />
+                <button type="button" className="btn btn-secondary" onClick={()=>search()}>
+                  <i className="fas fa-search"></i> Cari User
                 </button>
               </p>
-              <div className="modal fade" id="exampleModal" tabIndex={-1} role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div className="modal-dialog" role="document">
-                  <div className="modal-content">
-                    <div className="modal-header">
-                      <h5 className="modal-title" id="exampleModalLabel">Search User</h5>
-                      <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                      </button>
-                    </div>
-                    <div className="modal-body">
-                      <input type="text" placeholder="Please Input User Email Only" className="form-control" onChange={(e)=>{
-                      setData(Inertia.post('/user',{email:e.target.value}))
-                    }} />
-                      <p>User Found:</p>
-                      <table className='table'>
-                        <thead>
-                          <tr>
-                            <td>Username</td>
-                            <td>Email</td>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {data.map((d)=>{
-                            return(
-                              <tr>
-                                <td>{d.name}</td>
-                                <td>{d.email}</td>
-                              </tr>
-                            )
-                          })}
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-                </div>
-              </div>
             </li>
             <li className="nav-item py-2" style={{height:'600px',overflow:'auto'}}>
-            {users.map((pengguna)=>{
-              if(pengguna.id == user.id){
+              {userSearch.map((pengguna)=>{
+                if(pengguna.id == user.id){
 
-              }else{
+                }else{
 
-                return(
-                  <p className="nav-link" onClick={()=>handleClick(pengguna.id)} key={pengguna.id}>
-                    <img className="img-profile rounded-circle" src="/img/undraw_profile.svg" />
-                    <span className="ml-2">{pengguna.name}</span>  
-                  </p>
-                )
-              }
-            })}
+                  return(
+                    <p className="nav-link" onClick={()=>handleClick(pengguna.id)} key={pengguna.id}>
+                      <span className="ml-2">{pengguna.name}</span>  
+                    </p>
+                  )
+                }
+              })}
+              <hr/>
+              {users.map((pengguna)=>{
+                if(pengguna.id == user.id){
+
+                }else{
+
+                  return(
+                    <p className="nav-link" onClick={()=>handleClick(pengguna.id)} key={pengguna.id}>
+                      <img className="img-profile rounded-circle" src="/img/undraw_profile.svg" />
+                      <span className="ml-2">{pengguna.name}</span>  
+                    </p>
+                  )
+                }
+              })}
             </li>
             
           </ul>

@@ -42,13 +42,12 @@
 *::after {
   box-sizing: border-box;
 }
-/* Sembunyikan scrollbar dari Chrome, Safari dan Opera */
 *::-webkit-scrollbar {
-    display: none;
+  display: none;
 }
-  
+
 /* Sembunyikan scrollbar untuk IE, Edge dan Firefox */
-* {
+*{
   -ms-overflow-style: none;  /* IE dan Edge */
   scrollbar-width: none;  /* Firefox */
 }

@@ -68,12 +68,4 @@ Route::post('/', function (Request $request) {
     ]);
 })->middleware('auth');
 
-Route::post('/user',function(Request $request){
-	$users = [];
-	foreach (User::where('email','like','%'.$request->email.'%')->get() as $user) {
-		$user[] = ['name'=>$user->name,'email'=>$user->email,'id'=>$user->id];
-	}
-	;
-	return $users;
-});
 

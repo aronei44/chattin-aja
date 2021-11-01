@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 use App\Models\User;
+use App\Models\Chat;
 
 class HandleInertiaRequests extends Middleware
 {
@@ -38,8 +39,25 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request)
     {
+        $users = [];
+        foreach(Chat::where('user1_id',Auth::user()->id)->get() as $chat){
+            $user = User::find($chat->user2_id);
+            $users[]=[
+                'name'=>$user->name,
+                'email'=>$user->mail,
+                'id'=>$user->id
+            ];
+        }
+        foreach(Chat::where('user2_id',Auth::user()->id)->get() as $chat){
+            $user = User::find($chat->user1_id);
+            $users[]=[
+                'name'=>$user->name,
+                'email'=>$user->mail,
+                'id'=>$user->id
+            ];
+        }
         return array_merge(parent::share($request), [
-            'users'=> User::all(),
+            'users'=> $users,
             'user' => Auth::user()
         ]);
     }
