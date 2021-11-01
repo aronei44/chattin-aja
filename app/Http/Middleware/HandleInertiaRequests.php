@@ -40,6 +40,8 @@ class HandleInertiaRequests extends Middleware
     public function share(Request $request)
     {
         $users = [];
+        if(Auth::user()){
+            
         foreach(Chat::where('user1_id',Auth::user()->id)->get() as $chat){
             $user = User::find($chat->user2_id);
             $users[]=[
@@ -55,6 +57,7 @@ class HandleInertiaRequests extends Middleware
                 'email'=>$user->mail,
                 'id'=>$user->id
             ];
+        }
         }
         return array_merge(parent::share($request), [
             'users'=> $users,
