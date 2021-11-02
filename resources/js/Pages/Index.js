@@ -1,6 +1,6 @@
 import React, {useState} from 'react'
 import Layout from './Layout'
-import { usePage } from '@inertiajs/inertia-react'
+import { usePage, Link } from '@inertiajs/inertia-react'
 import { Inertia } from '@inertiajs/inertia'
 
 
@@ -41,6 +41,14 @@ const Right = ({data}) =>{
     </div>
 	)
 }
+const Back = () =>{
+	return(
+		<Link href="/" className="btn btn-primary" style={{position:'fixed',top:'100px',right:'50px',zIndex:'999'}}>
+			back
+		</Link>
+	)
+}
+
 
 export default function Welcome({name, id, chats}) {
 	const { user } = usePage().props
@@ -56,10 +64,29 @@ export default function Welcome({name, id, chats}) {
 	 		elem.scrollTop = elem.scrollHeight;
 		}
 	},1)
+	const [nama, setNama] = useState('')
+	const [userSearch, setUserSearch] = useState([{
+	  name:'',
+	  email:'',
+	  id:''
+	}])
+
+	const search = () =>{
+	    fetch('/api/user/'+nama)
+	        .then(response => response.json())
+	        .then(data => setUserSearch(data));
+
+	}
+	const handleClick = (id) =>{
+	  Inertia.post('/', {id})
+	}
+
 	if(id!=undefined){
 	  return (
 	    <Layout>
 	      <div id="content">
+	      	<Back />
+
 	        <nav className="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow" style={{
 	        	position:'fixed',
 	        	top:'0px',
@@ -67,7 +94,7 @@ export default function Welcome({name, id, chats}) {
 	        	zIndex:'999'
 	      	}}>
 	          
-	          <ul className="navbar-nav mr-auto">
+	          <ul className="navbar-nav">
 	            <li className="nav-item dropdown no-arrow">
 	              <a className="nav-link">
 	                <img className="img-profile rounded-circle" src="/img/undraw_profile.svg" />
@@ -75,13 +102,7 @@ export default function Welcome({name, id, chats}) {
 	              </a>
 	              
 	            </li>
-	          </ul>
-	          <ul className="navbar-nav ml-auto">
-	          	<li className="nav-item">
-	          		<button type="button" className="btn btn-danger" onClick={()=>{
-	          			document.getElementById('logform').submit()
-	          		}}>Log Out</button>
-	          	</li>
+	            
 	          </ul>
 	        </nav>
 	        {/* End of Topbar */}
@@ -117,6 +138,7 @@ export default function Welcome({name, id, chats}) {
 		return (
 	    <Layout>
 	      <div id="content">
+	      	<Back />
 	        <nav className="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
 	          
 	          <ul className="navbar-nav mr-auto">
@@ -135,6 +157,28 @@ export default function Welcome({name, id, chats}) {
 	          	</li>
 	          </ul>
 	        </nav>
+	        <div className="container">
+	        	<h1>Selamat Datang Di Aplikasi Chat</h1>
+	        	<h2>Cari dan Tambah User</h2>
+            <input className="form-control" type="text" placeholder="masukan username" onChange={(e)=>setNama(e.target.value)} />
+            <button type="button" className="btn btn-secondary" onClick={()=>search()}>
+              <i className="fas fa-search"></i> Cari User
+            </button>
+            <hr />
+            <p>User Ditemukan :</p>
+            {userSearch.map((pengguna)=>{
+                if(pengguna.id == user.id){
+
+                }else{
+
+                  return(
+                    <p className="nav-link" onClick={()=>handleClick(pengguna.id)} key={pengguna.id}>
+                      <span className="ml-2">{pengguna.name}</span>  
+                    </p>
+                  )
+                }
+              })}
+	        </div>
 	      </div>
 	    </Layout>
 	  )

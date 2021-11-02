@@ -5,6 +5,7 @@ import { Head } from '@inertiajs/inertia-react'
 import { usePage } from '@inertiajs/inertia-react'
 import '/css/sb-admin-2.min.css'
 import '/js/sb-admin-2.min.js'
+import '/css/chat.css'
 
 
 export default function Layout({ children }) {
@@ -12,19 +13,7 @@ const { users, user } = usePage().props
 const handleClick = (id) =>{
   Inertia.post('/', {id})
 }
-const [name, setName] = useState('')
-const [userSearch, setUserSearch] = useState([{
-  name:'',
-  email:'',
-  id:''
-}])
 
-const search = () =>{
-    fetch('/api/user/'+name)
-        .then(response => response.json())
-        .then(data => setUserSearch(data));
-
-}
 
   return (
     <main id="page-top">
@@ -35,28 +24,8 @@ const search = () =>{
               <div className="sidebar-brand-text mx-3">Chattin aja</div>
             </Link>
             <hr className="sidebar-divider my-0"  />
-            <li className="nav-item" style={{marginTop:'75px'}}>
-              <p className="nav-link">
-                <input className="form-control" type="text" placeholder="masukan username" onChange={(e)=>setName(e.target.value)} />
-                <button type="button" className="btn btn-secondary" onClick={()=>search()}>
-                  <i className="fas fa-search"></i> Cari User
-                </button>
-              </p>
-            </li>
-            <li className="nav-item py-2" style={{height:'600px',overflow:'auto'}}>
-              {userSearch.map((pengguna)=>{
-                if(pengguna.id == user.id){
-
-                }else{
-
-                  return(
-                    <p className="nav-link" onClick={()=>handleClick(pengguna.id)} key={pengguna.id}>
-                      <span className="ml-2">{pengguna.name}</span>  
-                    </p>
-                  )
-                }
-              })}
-              <hr/>
+            
+            <li className="nav-item py-2" style={{height:'600px',overflow:'auto',marginTop:'100px'}}>
               {users.map((pengguna)=>{
                 if(pengguna.id == user.id){
 
