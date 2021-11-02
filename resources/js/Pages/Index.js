@@ -51,11 +51,11 @@ const Back = () =>{
 
 
 export default function Welcome({name, id, chats}) {
-	const { user } = usePage().props
+	const { user, csrf } = usePage().props
 	const [text, setText] = useState('')
 	const kirim = () =>{
 		document.getElementById('text').value = ''
-		const data = {text, id}
+		const data = {text, id, _token:csrf}
 		Inertia.post('/',data)
 	}
 	setTimeout(()=>{
@@ -79,6 +79,9 @@ export default function Welcome({name, id, chats}) {
 	}
 	const handleClick = (id) =>{
 	  Inertia.post('/', {id})
+	}
+	const logOut = () =>{
+		Inertia.post('/logout', {_token:csrf})
 	}
 
 	if(id!=undefined){
@@ -138,7 +141,6 @@ export default function Welcome({name, id, chats}) {
 		return (
 	    <Layout>
 	      <div id="content">
-	      	<Back />
 	        <nav className="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
 	          
 	          <ul className="navbar-nav mr-auto">
@@ -151,9 +153,7 @@ export default function Welcome({name, id, chats}) {
 	          </ul>
 	          <ul className="navbar-nav ml-auto">
 	          	<li className="nav-item">
-	          		<button type="button" className="btn btn-danger" onClick={()=>{
-	          			document.getElementById('logform').submit()
-	          		}}>Log Out</button>
+	          		<button type="button" className="btn btn-danger" onClick={logOut}>Log Out</button>
 	          	</li>
 	          </ul>
 	        </nav>

@@ -145,7 +145,9 @@ function Welcome(_ref3) {
   var name = _ref3.name,
       id = _ref3.id,
       chats = _ref3.chats;
-  var user = (0,_inertiajs_inertia_react__WEBPACK_IMPORTED_MODULE_2__.usePage)().props.user;
+  var _usePage$props = (0,_inertiajs_inertia_react__WEBPACK_IMPORTED_MODULE_2__.usePage)().props,
+      user = _usePage$props.user,
+      csrf = _usePage$props.csrf;
 
   var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
       _useState2 = _slicedToArray(_useState, 2),
@@ -156,7 +158,8 @@ function Welcome(_ref3) {
     document.getElementById('text').value = '';
     var data = {
       text: text,
-      id: id
+      id: id,
+      _token: csrf
     };
     _inertiajs_inertia__WEBPACK_IMPORTED_MODULE_3__.Inertia.post('/', data);
   };
@@ -194,6 +197,12 @@ function Welcome(_ref3) {
   var handleClick = function handleClick(id) {
     _inertiajs_inertia__WEBPACK_IMPORTED_MODULE_3__.Inertia.post('/', {
       id: id
+    });
+  };
+
+  var logOut = function logOut() {
+    _inertiajs_inertia__WEBPACK_IMPORTED_MODULE_3__.Inertia.post('/logout', {
+      _token: csrf
     });
   };
 
@@ -282,7 +291,7 @@ function Welcome(_ref3) {
     return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_Layout__WEBPACK_IMPORTED_MODULE_1__["default"], {
       children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
         id: "content",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(Back, {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("nav", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("nav", {
           className: "navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow",
           children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("ul", {
             className: "navbar-nav mr-auto",
@@ -306,9 +315,7 @@ function Welcome(_ref3) {
               children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("button", {
                 type: "button",
                 className: "btn btn-danger",
-                onClick: function onClick() {
-                  document.getElementById('logform').submit();
-                },
+                onClick: logOut,
                 children: "Log Out"
               })
             })
@@ -392,11 +399,13 @@ function Layout(_ref) {
   var children = _ref.children;
   var _usePage$props = (0,_inertiajs_inertia_react__WEBPACK_IMPORTED_MODULE_1__.usePage)().props,
       users = _usePage$props.users,
-      user = _usePage$props.user;
+      user = _usePage$props.user,
+      csrf = _usePage$props.csrf;
 
   var handleClick = function handleClick(id) {
     _inertiajs_inertia__WEBPACK_IMPORTED_MODULE_2__.Inertia.post('/', {
-      id: id
+      id: id,
+      _token: csrf
     });
   };
 
@@ -457,52 +466,6 @@ function Layout(_ref) {
       href: "#page-top",
       children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("i", {
         className: "fas fa-angle-up"
-      })
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
-      className: "modal fade",
-      id: "logoutModal",
-      tabIndex: -1,
-      role: "dialog",
-      "aria-labelledby": "exampleModalLabel",
-      "aria-hidden": "true",
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
-        className: "modal-dialog",
-        role: "document",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
-          className: "modal-content",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
-            className: "modal-header",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("h5", {
-              className: "modal-title",
-              id: "exampleModalLabel",
-              children: "Ready to Leave?"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("button", {
-              className: "close",
-              type: "button",
-              "data-dismiss": "modal",
-              "aria-label": "Close",
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("span", {
-                "aria-hidden": "true",
-                children: "\xD7"
-              })
-            })]
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
-            className: "modal-body",
-            children: "Select \"Logout\" below if you are ready to end your current session."
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
-            className: "modal-footer",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("button", {
-              className: "btn btn-secondary",
-              type: "button",
-              "data-dismiss": "modal",
-              children: "Cancel"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("a", {
-              className: "btn btn-primary",
-              href: "login.html",
-              children: "Logout"
-            })]
-          })]
-        })
       })
     })]
   });

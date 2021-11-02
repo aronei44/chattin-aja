@@ -17,9 +17,6 @@
   </head>
   <body>
     @inertia
-    <form action="/logout" method="post" id="logform">
-      @csrf
-    </form>
     <script src="vendor/jquery/jquery.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 

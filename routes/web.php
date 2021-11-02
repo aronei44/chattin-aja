@@ -18,11 +18,56 @@ use App\Models\Pesan;
 |
 */
 
-Auth::routes();
+
+Route::get('/login', function () {
+	return Inertia::render('Login');
+})->name('login')->middleware('guest');
+Route::post('/login', function(Request $request){
+	$credentials = $request->validate([
+        'email' => ['required', 'email'],
+        'password' => ['required'],
+    ]);
+
+    if (Auth::attempt($credentials)) {
+        $request->session()->regenerate();
+
+        return redirect()->intended('/');
+    }
+});
+
+Route::get('/register', function () {
+	return Inertia::render('Register');
+})->middleware('guest');
+Route::post('/register', function(Request $request){
+	$validatedData = $request->validate([
+        'name'      => 'required|min:8|max:45|unique:users',
+        'email'     => 'required|email|unique:users',
+        'password'  => 'required|min:8',
+
+    ]);
+    $validatedData['password']  = Hash::make($validatedData['password']);
+	User::create($validatedData);
+    return redirect('/login');
+});
+
+
+Route::post('/logout', function(Request $request){
+	Auth::logout();
+
+    $request->session()->invalidate();
+
+    $request->session()->regenerateToken();
+
+    return redirect('/');
+});
+
 
 Route::get('/', function () {
     return Inertia::render('Index');
 })->name('home')->middleware('auth');
+
+
+// Auth::routes();
 
 Route::post('/', function (Request $request) {
 	$chat = Chat::where('user1_id',Auth::user()->id)
