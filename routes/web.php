@@ -1,12 +1,10 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Http\Request;
-use Inertia\Inertia;
-use App\Models\User;
-use App\Models\Chat;
-use App\Models\Pesan;
+
+
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\LogController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -18,99 +16,26 @@ use App\Models\Pesan;
 |
 */
 
+// Login
+Route::get('/login', [LogController::class,'loginView'])->name('login')->middleware('guest');
+Route::post('/login', [LogController::class,'loginAuth']);
 
-Route::get('/login', function () {
-	return Inertia::render('Login');
-})->name('login')->middleware('guest');
-Route::post('/login', function(Request $request){
-	$credentials = $request->validate([
-        'email' => ['required', 'email'],
-        'password' => ['required'],
-    ]);
+// Register
+Route::get('/register', [LogController::class,'registerView'])->middleware('guest');
+Route::post('/register', [LogController::class,'store']);
 
-    if (Auth::attempt($credentials)) {
-        $request->session()->regenerate();
+// Logout
+Route::post('/logout', [LogController::class,'logout']);
 
-        return redirect()->intended('/');
-    }
-});
-
-Route::get('/register', function () {
-	return Inertia::render('Register');
-})->middleware('guest');
-Route::post('/register', function(Request $request){
-	$validatedData = $request->validate([
-        'name'      => 'required|min:8|max:45|unique:users',
-        'email'     => 'required|email|unique:users',
-        'password'  => 'required|min:8',
-
-    ]);
-    $validatedData['password']  = Hash::make($validatedData['password']);
-	User::create($validatedData);
-    return redirect('/login');
-});
-
-
-Route::post('/logout', function(Request $request){
-	Auth::logout();
-
-    $request->session()->invalidate();
-
-    $request->session()->regenerateToken();
-
-    return redirect('/');
-});
-
-
-Route::get('/', function () {
-    return Inertia::render('Index');
-})->name('home')->middleware('auth');
-
-
+// Just uncomment Routes below if you want separate log view with app view
 // Auth::routes();
 
-Route::post('/', function (Request $request) {
-	$chat = Chat::where('user1_id',Auth::user()->id)
-			->where('user2_id',$request->id)
-			->first();
-	if(!$chat){
-		$chat = Chat::where('user1_id',$request->id)
-			->where('user2_id',Auth::user()->id)
-			->first();
-	}
-	if(!$chat){
-		$chat = Chat::create([
-			'user1_id'=>Auth::user()->id,
-			'user2_id'=>$request->id
-		]);
-	}
-	if($request->text){
-		Pesan::create([
-			'chat_id'	=>$chat->id,
-			'from'		=>Auth::user()->id,
-			'to'		=>$request->id,
-			'body'		=>$request->text
-		]);
-	}
-	$user = User::find($request->id);
-	$chats = [];
-	$pesan = Chat::find($chat->id);
-	foreach ($pesan->pesans as $pesan) {
-		$date = explode(' ', $pesan->created_at);
-		$chats[]=[
-			'id' => $pesan->id,
-			'text'=> $pesan->body,
-			'from'=> $pesan->from,
-			'to'=> $pesan->to,
-			'date'=>$date[0],
-			'clock'=>$date[1]
-		];
-	}
-    return Inertia::render('Index',[
-    	'name'=>$user->name,
-    	'id'=>$user->id,
-    	'chats'=>$chats
-    ]);
-})->middleware('auth');
+
+// Yeah You Right. this app just has 2 Main Routes. Happy to learn
+Route::get('/', [HomeController::class,'getIndex'])->name('home')->middleware('auth');
+Route::post('/', [HomeController::class,'postIndex'])->middleware('auth');
+
+
+
 
 
