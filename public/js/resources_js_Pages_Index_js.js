@@ -70,6 +70,9 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
+Echo.channel('Notification').listen('.message', function (e) {
+  alert(e.message);
+});
 
 var Left = function Left(_ref) {
   var data = _ref.data;

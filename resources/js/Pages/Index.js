@@ -4,6 +4,12 @@ import { usePage, Link } from '@inertiajs/inertia-react'
 import { Inertia } from '@inertiajs/inertia'
 
 
+
+Echo.channel('Notification')
+    .listen('.message', (e) => {
+        alert(e.message);
+    });
+
 const Left = ({data}) =>{
 	return(
 		<div className="card shadow mt-3" style={{width:'90%'}}>

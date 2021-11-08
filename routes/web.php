@@ -1,10 +1,12 @@
 <?php
 
+use App\Events\MessageNotification;
+
+
 use Illuminate\Support\Facades\Route;
-
-
-use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LogController;
+use App\Http\Controllers\HomeController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -36,6 +38,8 @@ Route::get('/', [HomeController::class,'getIndex'])->name('home')->middleware('a
 Route::post('/', [HomeController::class,'postIndex'])->middleware('auth');
 
 
-
+Route::get('/event', function () {
+    event(new MessageNotification('coba'));
+});
 
 
