@@ -70,9 +70,6 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
-Echo.channel('Notification').listen('.message', function (e) {
-  alert(e.message);
-});
 
 var Left = function Left(_ref) {
   var data = _ref.data;
@@ -167,6 +164,13 @@ function Welcome(_ref3) {
     _inertiajs_inertia__WEBPACK_IMPORTED_MODULE_3__.Inertia.post('/', data);
   };
 
+  Echo.channel('Notification').listen('.message', function (e) {
+    if (e.message.to == user.id && e.message.from == id) {
+      _inertiajs_inertia__WEBPACK_IMPORTED_MODULE_3__.Inertia.post('/', {
+        id: id
+      });
+    }
+  });
   setTimeout(function () {
     var elem = document.getElementById('scroll');
 

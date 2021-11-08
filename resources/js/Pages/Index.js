@@ -5,11 +5,6 @@ import { Inertia } from '@inertiajs/inertia'
 
 
 
-Echo.channel('Notification')
-    .listen('.message', (e) => {
-        alert(e.message);
-    });
-
 const Left = ({data}) =>{
 	return(
 		<div className="card shadow mt-3" style={{width:'90%'}}>
@@ -57,6 +52,9 @@ const Back = () =>{
 
 
 export default function Welcome({name, id, chats}) {
+	
+	
+
 	const { user, csrf } = usePage().props
 	const [text, setText] = useState('')
 	const kirim = () =>{
@@ -64,6 +62,12 @@ export default function Welcome({name, id, chats}) {
 		const data = {text, id, _token:csrf}
 		Inertia.post('/',data)
 	}
+	Echo.channel('Notification')
+		.listen('.message', (e) => {
+			if(e.message.to == user.id && e.message.from == id){
+				Inertia.post('/', {id})
+			}
+		});
 	setTimeout(()=>{
 		const elem = document.getElementById('scroll');
 		if(elem){

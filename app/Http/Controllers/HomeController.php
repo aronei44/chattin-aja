@@ -3,11 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Chat;
-use App\Models\Pesan;
 use App\Models\User;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
+use App\Models\Pesan;
+use Illuminate\Http\Request;
+use App\Events\MessageNotification;
+use Illuminate\Support\Facades\Auth;
 
 
 class HomeController extends Controller
@@ -42,12 +43,13 @@ class HomeController extends Controller
 
         // Some request contains more than id
         if($request->text){
-            Pesan::create([
+            $pesan = Pesan::create([
                 'chat_id'   =>$chat->id,
                 'from'      =>Auth::user()->id,
                 'to'        =>$request->id,
                 'body'      =>$request->text
             ]);
+            event(new MessageNotification(['from'=>$pesan->from,'to'=>$pesan->to]));
         }
 
         // lets see if the log user has a chats with target user
