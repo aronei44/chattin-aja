@@ -49,11 +49,13 @@ export default function Register(){
                     <input type="password" className="form-control" onChange={(e)=>setPassword(e.target.value)}/>
                   </div>
                 </div>
-                <div className="form-group row mb-0">
-                	<div className="col-md-8 offset-md-4">
+                <div className="form-group">
+                	<div className="text-center">
 		                <button type="button" className="btn btn-primary" onClick={handleClick}>Register</button>
-		                <span className="ml-5 mr-5">or</span>
-		                <Link href="/login" className="btn btn-success">Login</Link>
+		                <p className="ml-5 mr-5">
+                      Sudah punya akun? 
+		                  <Link href="/login"> Login</Link>
+                    </p>
                 	</div>
                 </div>
 	            </div>
