@@ -25,7 +25,7 @@ class LogController extends Controller
 	        return redirect()->intended('/');
 	    }
 	    else{
-	    	return back();
+	    	return Inertia::render('Login',['message'=>'ah. sepertinya ada yang salah. :(']);
 	    }
     }
     public function registerView(){

@@ -2,14 +2,22 @@ import React, {useState} from 'react'
 import Layout from './Layout'
 import { usePage, Link } from '@inertiajs/inertia-react'
 import { Inertia } from '@inertiajs/inertia'
+import Swal from 'sweetalert2'
 
 
-export default function Login(){
+export default function Login({message}){
 	const { csrf } = usePage().props
 	const [email, setEmail] = useState('')
 	const [password, setPassword] = useState('')
 	const handleClick = () =>{
 		Inertia.post('/login', {email,password,_token:csrf})
+	}
+	if(message){
+		Swal.fire({
+			icon: 'error',
+			title: 'Oops...',
+			text: message
+		  })
 	}
 	return(
 	<Layout>
@@ -30,27 +38,29 @@ export default function Login(){
 	          <div className="card">
 	            <div className="card-header">Login</div>
 	            <div className="card-body">
-                <div className="form-group row">
-                  <label htmlFor="email" className="col-md-4 col-form-label text-md-right">Email</label>
-                  <div className="col-md-6">
-                    <input type="email" className="form-control" autoFocus  onChange={(e)=>setEmail(e.target.value)}/>
-                  </div>
-                </div>
-                <div className="form-group row">
-                  <label htmlFor="password" className="col-md-4 col-form-label text-md-right">Password</label>
-                  <div className="col-md-6">
-                    <input type="password" className="form-control"  onChange={(e)=>setPassword(e.target.value)}/>
-                  </div>
-                </div>
-                <div className="form-group">
-                	<div className="text-center">
-		                <button type="button" className="btn btn-primary" onClick={handleClick}>Login</button>
-		                <p className="ml-5 mr-5">
-							Belum Punya akun?
-		                	<Link href="/register"> Register</Link>
-						</p>
-                	</div>
-                </div>
+					
+					
+					<div className="form-group row">
+						<label htmlFor="email" className="col-md-4 col-form-label text-md-right">Email</label>
+						<div className="col-md-6">
+							<input type="email" className="form-control" autoFocus  onChange={(e)=>setEmail(e.target.value)}/>
+						</div>
+						</div>
+						<div className="form-group row">
+						<label htmlFor="password" className="col-md-4 col-form-label text-md-right">Password</label>
+						<div className="col-md-6">
+							<input type="password" className="form-control"  onChange={(e)=>setPassword(e.target.value)}/>
+						</div>
+					</div>
+					<div className="form-group">
+						<div className="text-center">
+							<button type="button" className="btn btn-primary" onClick={handleClick}>Login</button>
+							<p className="ml-5 mr-5">
+								Belum Punya akun?
+								<Link href="/register"> Register</Link>
+							</p>
+						</div>
+					</div>
 	            </div>
 	          </div>
 	        </div>
