@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Inertia\Middleware;
 use App\Models\User;
 use App\Models\Chat;
+use App\Models\Pesan;
 
 class HandleInertiaRequests extends Middleware
 {
@@ -43,23 +44,48 @@ class HandleInertiaRequests extends Middleware
         // in this middleware, you can to send any data to all pages you have. no problem it's react or vue 
         $users = [];
         if(Auth::user()){
-            
-            foreach(Chat::where('user1_id',Auth::user()->id)->get() as $chat){
-                $user = User::find($chat->user2_id);
+            $pesans =[];
+            foreach(Pesan::orderBy('id','desc')->get() as $pesan){
+                if($pesan->from == Auth::user()->id || $pesan->to == Auth::user()->id){
+                    if (!in_array($pesan->chat_id, $pesans)){
+                        $pesans[]=$pesan->chat_id;
+                    }
+                }
+            }
+            $chats=[];
+            foreach($pesans as $chat){
+                $chat = Chat::find($chat);
+                if($chat->user1_id==Auth::User()->id){
+                    $chats[]=$chat->user2_id;
+                }else{
+                    $chats[]=$chat->user1_id;
+
+                }
+            }
+            foreach($chats as $chat){
+                $user = User::find($chat);
                 $users[]=[
                     'name'=>$user->name,
                     'email'=>$user->mail,
                     'id'=>$user->id
                 ];
             }
-            foreach(Chat::where('user2_id',Auth::user()->id)->get() as $chat){
-                $user = User::find($chat->user1_id);
-                $users[]=[
-                    'name'=>$user->name,
-                    'email'=>$user->mail,
-                    'id'=>$user->id
-                ];
-            }
+            // foreach(Chat::where('user1_id',Auth::user()->id)->get() as $chat){
+            //     $user = User::find($chat->user2_id);
+            //     $users[]=[
+            //         'name'=>$user->name,
+            //         'email'=>$user->mail,
+            //         'id'=>$user->id
+            //     ];
+            // }
+            // foreach(Chat::where('user2_id',Auth::user()->id)->get() as $chat){
+            //     $user = User::find($chat->user1_id);
+            //     $users[]=[
+            //         'name'=>$user->name,
+            //         'email'=>$user->mail,
+            //         'id'=>$user->id
+            //     ];
+            // }
         }
 
         return array_merge(parent::share($request), [
