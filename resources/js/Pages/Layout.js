@@ -17,13 +17,17 @@ const handleClick = (id) =>{
 }
 const [users, setUsers] = useState([])
 const [load, setLoad] = useState(true)
-
-if(load){
-  fetch('/user')
-  .then(response => response.json())
-  .then(data => setUsers(data));
-  setLoad(false)
+if(user){
+    if(load){
+      fetch('/user')
+      .then(response => response.json())
+      .then(data => setUsers(data));
+      setLoad(false)
+    }
 }
+
+
+
 Echo.channel('Notification')
 		.listen('.message', (e) => {
 			if(e.message.to == user.id || e.message.from == user.id){

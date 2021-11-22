@@ -104,13 +104,15 @@ function Layout(_ref) {
       load = _useState4[0],
       setLoad = _useState4[1];
 
-  if (load) {
-    fetch('/user').then(function (response) {
-      return response.json();
-    }).then(function (data) {
-      return setUsers(data);
-    });
-    setLoad(false);
+  if (user) {
+    if (load) {
+      fetch('/user').then(function (response) {
+        return response.json();
+      }).then(function (data) {
+        return setUsers(data);
+      });
+      setLoad(false);
+    }
   }
 
   Echo.channel('Notification').listen('.message', function (e) {
