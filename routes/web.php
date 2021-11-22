@@ -36,6 +36,8 @@ Route::post('/logout', [LogController::class,'logout']);
 // Yeah You Right. this app just has 2 Main Routes. Happy to learn
 Route::get('/', [HomeController::class,'getIndex'])->name('home')->middleware('auth');
 Route::post('/', [HomeController::class,'postIndex'])->middleware('auth');
+Route::get('/user', [HomeController::class,'getUser'])->middleware('auth');
+
 
 
 Route::get('/event', function () {

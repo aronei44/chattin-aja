@@ -6,14 +6,32 @@ import { usePage } from '@inertiajs/inertia-react'
 import '/css/sb-admin-2.min.css'
 import '/js/sb-admin-2.min.js'
 import '/css/chat.css'
+import axios from 'axios'
 
 
 export default function Layout({ children }) {
-const { users, user, csrf } = usePage().props
+// const { users, user, csrf } = usePage().props
+const { user, csrf } = usePage().props
 const handleClick = (id) =>{
   Inertia.post('/', {id,_token:csrf})
 }
+const [users, setUsers] = useState([])
+const [load, setLoad] = useState(true)
 
+if(load){
+  fetch('/user')
+  .then(response => response.json())
+  .then(data => setUsers(data));
+  setLoad(false)
+}
+Echo.channel('Notification')
+		.listen('.message', (e) => {
+			if(e.message.to == user.id || e.message.from == user.id){
+				fetch('/user')
+        .then(response => response.json())
+        .then(data => setUsers(data));
+			}
+		});
 
   return (
     <main id="page-top">
@@ -49,7 +67,6 @@ const handleClick = (id) =>{
         <a className="scroll-to-top rounded" href="#page-top">
           <i className="fas fa-angle-up" />
         </a>
-        
     </main>
   )
 }

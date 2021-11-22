@@ -75,4 +75,36 @@ class HomeController extends Controller
             'chats'=>$chats
         ]);
     }
+    public function getUser(){
+        $users = [];
+        if(Auth::user()){
+            $pesans =[];
+            foreach(Pesan::orderBy('id','desc')->get() as $pesan){
+                if($pesan->from == Auth::user()->id || $pesan->to == Auth::user()->id){
+                    if (!in_array($pesan->chat_id, $pesans)){
+                        $pesans[]=$pesan->chat_id;
+                    }
+                }
+            }
+            $chats=[];
+            foreach($pesans as $chat){
+                $chat = Chat::find($chat);
+                if($chat->user1_id==Auth::User()->id){
+                    $chats[]=$chat->user2_id;
+                }else{
+                    $chats[]=$chat->user1_id;
+
+                }
+            }
+            foreach($chats as $chat){
+                $user = User::find($chat);
+                $users[]=[
+                    'name'=>$user->name,
+                    'email'=>$user->email,
+                    'id'=>$user->id
+                ];
+            }
+        }
+        return $users;
+    }
 }

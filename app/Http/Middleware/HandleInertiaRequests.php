@@ -42,34 +42,34 @@ class HandleInertiaRequests extends Middleware
     {
         // You are really good dev if you get here in 1 day. haha
         // in this middleware, you can to send any data to all pages you have. no problem it's react or vue 
-        $users = [];
-        if(Auth::user()){
-            $pesans =[];
-            foreach(Pesan::orderBy('id','desc')->get() as $pesan){
-                if($pesan->from == Auth::user()->id || $pesan->to == Auth::user()->id){
-                    if (!in_array($pesan->chat_id, $pesans)){
-                        $pesans[]=$pesan->chat_id;
-                    }
-                }
-            }
-            $chats=[];
-            foreach($pesans as $chat){
-                $chat = Chat::find($chat);
-                if($chat->user1_id==Auth::User()->id){
-                    $chats[]=$chat->user2_id;
-                }else{
-                    $chats[]=$chat->user1_id;
+        // $users = [];
+        // if(Auth::user()){
+        //     $pesans =[];
+        //     foreach(Pesan::orderBy('id','desc')->get() as $pesan){
+        //         if($pesan->from == Auth::user()->id || $pesan->to == Auth::user()->id){
+        //             if (!in_array($pesan->chat_id, $pesans)){
+        //                 $pesans[]=$pesan->chat_id;
+        //             }
+        //         }
+        //     }
+        //     $chats=[];
+        //     foreach($pesans as $chat){
+        //         $chat = Chat::find($chat);
+        //         if($chat->user1_id==Auth::User()->id){
+        //             $chats[]=$chat->user2_id;
+        //         }else{
+        //             $chats[]=$chat->user1_id;
 
-                }
-            }
-            foreach($chats as $chat){
-                $user = User::find($chat);
-                $users[]=[
-                    'name'=>$user->name,
-                    'email'=>$user->mail,
-                    'id'=>$user->id
-                ];
-            }
+        //         }
+        //     }
+        //     foreach($chats as $chat){
+        //         $user = User::find($chat);
+        //         $users[]=[
+        //             'name'=>$user->name,
+        //             'email'=>$user->mail,
+        //             'id'=>$user->id
+        //         ];
+        //     }
             // foreach(Chat::where('user1_id',Auth::user()->id)->get() as $chat){
             //     $user = User::find($chat->user2_id);
             //     $users[]=[
@@ -86,10 +86,10 @@ class HandleInertiaRequests extends Middleware
             //         'id'=>$user->id
             //     ];
             // }
-        }
+        // }
 
         return array_merge(parent::share($request), [
-            'users'=> $users, // i want to share all users data if user has any chat with log user
+            // 'users'=> $users, // i want to share all users data if user has any chat with log user
             'user' => Auth::user(), // this is just Auth::user()
             'csrf' => csrf_token()  // in laravel there must be csrf token every post form
         ]);
