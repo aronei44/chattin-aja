@@ -64,7 +64,7 @@ export default function Welcome({name, id, chats}) {
 	}
 	Echo.channel('Notification')
 		.listen('.message', (e) => {
-			if(e.message.to == user.id && e.message.from == id){
+			if(e.message.to == user.id || e.message.from == user.id){
 				Inertia.post('/', {id})
 			}
 		});
