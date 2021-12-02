@@ -18,12 +18,12 @@ const handleClick = (id) =>{
 const [users, setUsers] = useState([])
 const [load, setLoad] = useState(true)
 if(user){
-    if(load){
-      fetch('/user')
-      .then(response => response.json())
-      .then(data => setUsers(data));
-      setLoad(false)
-    }
+  if(load){
+    fetch('/user')
+    .then(response => response.json())
+    .then(data => setUsers(data));
+    setLoad(false)
+  }
 }
 
 
