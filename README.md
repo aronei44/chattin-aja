@@ -46,3 +46,6 @@ Pada terminal 2:
 ~~~
 npm run watch
 ~~~
+
+
+Oiya. siapkan juga akun pusher anda. buat di pusher.com
